@@ -59,7 +59,7 @@ class Teacher(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     teacher_id = models.IntegerField(unique=True)
-    teachers_nid = models.CharField(max_length=17)
+    teacher_nid = models.CharField(max_length=17)
     phone_number = models.CharField(max_length=15, blank=True)
     email = models.EmailField(max_length=100, unique=True)
     photo = models.ImageField(upload_to="photos/", null=True, blank=True)
@@ -79,7 +79,7 @@ class Teacher(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def __str__(self):
-        return f"Prof. {self.last_name}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Teacher Record"
@@ -87,16 +87,7 @@ class Teacher(models.Model):
 
 
 class Class(models.Model):
-    class Section(models.TextChoices):
-        SECTION_A = "SEC A", "Section A"
-        SECTION_B = "SEC B", "Section B"
-        SECTION_C = "SEC C", "Section C"
-
     class_name = models.CharField(max_length=10)
-    section = models.CharField(
-        max_length=15,
-        choices=Section.choices,
-    )
     teachers = models.ManyToManyField(Teacher, related_name='classes')
     class_teacher = models.ForeignKey(
         Teacher,
@@ -105,10 +96,17 @@ class Class(models.Model):
     )
 
     def __str__(self):
-        return f"{self.class_name} - {self.section}"
+        return self.class_name
 
     class Meta:
         verbose_name_plural = "Classes"
+
+class Section(models.Model):
+    section = models.CharField(max_length=100)
+    class_ref = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.class_ref} - {self.section}"
 
 
 class Subject(models.Model):

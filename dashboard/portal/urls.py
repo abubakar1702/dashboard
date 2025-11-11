@@ -4,7 +4,6 @@ from . import views
 app_name = 'portal'
 
 urlpatterns = [
-    path('', views.student_list, name='student_list'),
-    # Or use the simple version:
-    # path('', views.student_list_simple, name='student_list'),
+    path('students/', views.student_list, name='student_list'),
+    path('students/<int:student_id>/', views.student_info, name='student_info'),
 ]

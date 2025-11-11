@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, Teacher, Class, Subject, Enrollment, Exam, Grade
+from .models import Student, Teacher, Class, Section, Subject, Enrollment, Exam, Grade
 
 
 @admin.register(Student)
@@ -27,13 +27,13 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('teacher_id', 'full_name', 'teachers_nid', 'phone_number', 'email', 'hire_date')
+    list_display = ('teacher_id', 'full_name', 'teacher_nid', 'phone_number', 'email', 'hire_date')
     list_filter = ('blood_group', 'hire_date', 'created_at')
     search_fields = ('first_name', 'last_name', 'teacher_id', 'email')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('Personal Information', {
-            'fields': ('first_name', 'last_name', 'teachers_nid', 'blood_group')
+            'fields': ('first_name', 'last_name', 'teacher_nid', 'blood_group')
         }),
         ('Contact Information', {
             'fields': ('phone_number', 'email')
@@ -55,12 +55,14 @@ class SubjectInline(admin.TabularInline):
 
 @admin.register(Class)
 class ClassAdmin(admin.ModelAdmin):
-    list_display = ('class_name', 'section', 'class_teacher')
-    list_filter = ('section', 'class_name')
-    search_fields = ('class_name', 'section', 'class_teacher__first_name', 'class_teacher__last_name')
+    list_display = ('class_name', 'class_teacher')
+    search_fields = ('class_name', 'class_teacher__first_name', 'class_teacher__last_name')
     filter_horizontal = ('teachers',)
     inlines = [SubjectInline]
 
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ("section", "class_ref")
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
