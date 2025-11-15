@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/">School Portal</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'portal:student_list' %}">Students</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Teachers</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Classes</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>

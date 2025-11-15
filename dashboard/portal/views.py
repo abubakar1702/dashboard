@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
 from .models import Student
 
 
@@ -14,10 +13,10 @@ def student_list(request):
     return render(request, 'portal/index.html', context)
 
 def student_info(request, student_id):
-    student = Student.objects.filter(student_id = student_id)
+    student = get_object_or_404(Student, id=student_id)
 
     context = {
-        'student' : student
+        'student': student
     }
 
     return render(request, 'portal/student_info.html', context)

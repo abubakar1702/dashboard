@@ -4,13 +4,17 @@ from .models import Student, Teacher, Class, Section, Subject, Enrollment, Exam,
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'full_name', 'date_of_birth', 'nationality', 'roll_number', 'phone_number')
+    list_display = ('student_id', 'full_name', 'date_of_birth', 'nationality', 'roll_number', 'phone_number', 'photo')
     list_filter = ('blood_group', 'nationality', 'created_at')
     search_fields = ('first_name', 'last_name', 'student_id', 'email')
     readonly_fields = ('created_at', 'updated_at', 'age')
+
     fieldsets = (
         ('Personal Information', {
-            'fields': ('first_name', 'last_name', 'date_of_birth', 'nationality', 'blood_group')
+            'fields': (
+                'first_name', 'last_name', 'date_of_birth', 'nationality',
+                'blood_group', 'photo'
+            )
         }),
         ('Academic Information', {
             'fields': ('student_id', 'roll_number', 'phone_number', 'email')
@@ -20,7 +24,7 @@ class StudentAdmin(admin.ModelAdmin):
         }),
         ('System Information', {
             'fields': ('created_at', 'updated_at', 'age'),
-            'classes': ('collapse',)
+            'classes': ('collapse',),
         }),
     )
 
