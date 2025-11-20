@@ -204,11 +204,15 @@ class Grade(models.Model):
     def percentage(self):
         if self.is_absent:
             return 0
+        if self.marks_obtained is None:
+            return 0
         return (self.marks_obtained / self.exam.total_marks) * 100
 
     @property
     def is_passed(self):
         if self.is_absent:
+            return False
+        if self.marks_obtained is None:
             return False
         return self.marks_obtained >= self.exam.pass_marks
 
@@ -218,6 +222,9 @@ class Grade(models.Model):
             return "AB"
 
         marks = self.marks_obtained
+        if marks is None:
+            return None
+
         if marks >= 80:
             return "A+"
         elif marks >= 70:
@@ -232,3 +239,4 @@ class Grade(models.Model):
             return "D"
         else:
             return "F"
+
