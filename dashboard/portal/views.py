@@ -1,5 +1,22 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Student, Class
+from .models import Student, Class, Teacher
+
+
+def teacher_list(request):
+    teachers = Teacher.objects.all()
+    context = {
+        'teachers': teachers,
+    }
+    return render(request, 'portal/teachers.html', context)
+
+
+def teacher_info(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+    context = {
+        'teacher': teacher,
+    }
+    return render(request, 'portal/teacher_info.html', context)
+
 
 
 def student_list(request):

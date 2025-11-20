@@ -1,0 +1,143 @@
+{% extends "base/index.html" %}
+{% block content %}
+<div class="container my-4">
+
+    <div class="card shadow-sm">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ teacher.full_name }}</h2>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Photo -->
+                <div class="col-md-4 text-center mb-3">
+                    {% if teacher.photo %}
+                    <img src="{{ teacher.photo.url }}" class="img-fluid rounded shadow-sm" alt="Photo">
+                    {% else %}
+                    <div class="bg-secondary rounded shadow-sm d-flex justify-content-center align-items-center text-white"
+                        style="height: 300px; width: 100%;">
+                        <span class="display-1">{{ teacher.first_name|first }}{{ teacher.last_name|first }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <div class="col-md-8">
+
+                    <h4 class="mb-3 fw-bold">Personal Information</h4>
+
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light">Full Name</th>
+                                <td>{{ teacher.full_name }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Teacher ID</th>
+                                <td>{{ teacher.teacher_id }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">NID</th>
+                                <td>{{ teacher.teacher_nid }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Blood Group</th>
+                                <td>{{ teacher.get_blood_group_display|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Hire Date</th>
+                                <td>{{ teacher.hire_date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 class="mt-4 mb-3 fw-bold">Contact Information</h4>
+
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light">Phone</th>
+                                <td>{{ teacher.phone_number|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Email</th>
+                                <td>{{ teacher.email|default:"Not provided" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- Classes Taught -->
+            <hr>
+            <h4 class="fw-bold">Classes Taught</h4>
+
+            {% if teacher.classes.all %}
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                {% for class_obj in teacher.classes.all %}
+                <a href="{% url 'portal:class_info' class_obj.id %}" class="btn btn-outline-info">
+                    {{ class_obj.class_name }}
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No classes assigned.</p>
+            {% endif %}
+
+            <!-- Lead Classes -->
+            {% if teacher.lead_classes.all %}
+            <h5 class="fw-bold mt-3">Class Teacher For:</h5>
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                {% for class_obj in teacher.lead_classes.all %}
+                <a href="{% url 'portal:class_info' class_obj.id %}" class="btn btn-outline-primary">
+                    {{ class_obj.class_name }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+
+            <!-- Subjects Taught -->
+            <hr>
+            <h4 class="fw-bold">Subjects Taught</h4>
+
+            {% if teacher.subjects.all %}
+            <table class="table table-striped table-bordered mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in teacher.subjects.all %}
+                    <tr>
+                        <td>{{ subject.subject_name }}</td>
+                        <td>
+                            <a href="{% url 'portal:class_info' subject.class_ref.id %}">
+                                {{ subject.class_ref.class_name }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No subjects assigned.</p>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
