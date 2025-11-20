@@ -1,0 +1,73 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Registered Students</h2>
+        <span class="badge bg-primary fs-6">{{ total_students }} Students</span>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" class="ps-4">Photo</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Student ID</th>
+                            <th scope="col">Roll Number</th>
+                            <th scope="col">Class</th>
+                            <th scope="col" class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td class="ps-4">
+                                {% if student.photo %}
+                                <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" class="rounded-circle"
+                                    width="40" height="40" style="object-fit: cover;">
+                                {% else %}
+                                <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white"
+                                    style="width: 40px; height: 40px;">
+                                    {{ student.first_name|first }}{{ student.last_name|first }}
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="fw-bold">{{ student.last_name }}, {{ student.first_name }}</div>
+                                <small class="text-muted">{{ student.email|default:"" }}</small>
+                            </td>
+                            <td>{{ student.student_id }}</td>
+                            <td>{{ student.roll_number }}</td>
+                            <td>
+                                {% for enrollment in student.enrollments.all %}
+                                {% if enrollment.status == 'ACTIVE' %}
+                                <span class="badge bg-info text-dark">{{ enrollment.class_enrolled.class_name }}</span>
+                                {% endif %}
+                                {% empty %}
+                                <span class="text-muted">-</span>
+                                {% endfor %}
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'portal:student_info' student.id %}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                No students found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

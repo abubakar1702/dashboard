@@ -10,7 +10,7 @@ def student_list(request):
         'total_students': students.count()
     }
 
-    return render(request, 'portal/index.html', context)
+    return render(request, 'portal/students.html', context)
 
 def student_info(request, student_id):
     student = get_object_or_404(Student, id=student_id)
