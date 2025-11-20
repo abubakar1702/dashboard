@@ -1,0 +1,87 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container my-4">
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ class_obj.class_name }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="fw-bold">Class Teacher</h5>
+                    <p class="lead">{{ class_obj.class_teacher.full_name }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5 class="fw-bold">Total Students</h5>
+                    <p class="lead">{{ class_obj.enrollments.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Subjects -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0 fs-5">Subjects</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for subject in class_obj.subjects.all %}
+                    <li class="list-group-item">{{ subject.subject_name }}</li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">No subjects assigned.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Enrolled Students -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0 fs-5">Enrolled Students</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Name</th>
+                                    <th>Student ID</th>
+                                    <th>Roll Number</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enrollment in class_obj.enrollments.all %}
+                                {% if enrollment.status == 'ACTIVE' %}
+                                <tr>
+                                    <td class="ps-4 fw-bold">{{ enrollment.student.full_name }}</td>
+                                    <td>{{ enrollment.student.student_id }}</td>
+                                    <td>{{ enrollment.student.roll_number }}</td>
+                                    <td class="text-end pe-4">
+                                        <a href="{% url 'portal:student_info' enrollment.student.id %}"
+                                            class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-3 text-muted">No active students found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

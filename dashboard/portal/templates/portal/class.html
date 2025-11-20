@@ -1,0 +1,41 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Classes</h2>
+        <span class="badge bg-primary fs-6">{{ classes.count }} Classes</span>
+    </div>
+
+    <div class="row">
+        {% for class in classes %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ class.class_name }}</h5>
+                    <p class="card-text text-muted mb-2">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Class Teacher: {{ class.class_teacher.full_name }}
+                    </p>
+                    <p class="card-text text-muted">
+                        <i class="bi bi-people me-2"></i>
+                        Students: {{ class.enrollments.count }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-top-0">
+                    <a href="{% url 'portal:class_info' class.id %}" class="btn btn-outline-primary w-100">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No classes found.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

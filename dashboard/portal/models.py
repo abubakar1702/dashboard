@@ -88,6 +88,7 @@ class Teacher(models.Model):
 
 class Class(models.Model):
     class_name = models.CharField(max_length=10)
+    class_serial = models.SmallIntegerField(max_length=2, default=0)
     teachers = models.ManyToManyField(Teacher, related_name='classes')
     class_teacher = models.ForeignKey(
         Teacher,
