@@ -3,7 +3,7 @@ from .models import Student
 
 
 def student_list(request):
-    students = Student.objects.all().order_by('last_name', 'first_name')
+    students = Student.objects.filter(enrollments__status='ACTIVE').distinct().order_by('last_name', 'first_name')
 
     context = {
         'students': students,
