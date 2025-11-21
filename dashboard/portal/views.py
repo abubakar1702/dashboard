@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Student, Class, Teacher
+from .models import Student, Class, Teacher, Enrollment
 from datetime import datetime
 
 
@@ -20,14 +20,40 @@ def teacher_info(request, teacher_id):
 
 
 
+from django.db.models import Exists, OuterRef
+
 def student_list(request):
-    students = Student.objects.filter(enrollments__status='ACTIVE').distinct().order_by('last_name', 'first_name')
+    selected_class = request.GET.get('class', 'all')
+    selected_gender = request.GET.get('gender', 'all')
+
+    active_enrollment = Enrollment.objects.filter(
+        student=OuterRef('pk'),
+        status='ACTIVE'
+    )
+
+    if selected_class and selected_class != 'all':
+        try:
+            class_id = int(selected_class)
+            active_enrollment = active_enrollment.filter(class_enrolled__id=class_id)
+        except (ValueError, TypeError):
+            pass
+
+    students = Student.objects.filter(
+        Exists(active_enrollment)
+    ).order_by('student_id')
+
+    if selected_gender and selected_gender != 'all':
+        students = students.filter(gender=selected_gender)
+
+    classes = Class.objects.all().order_by('class_serial')
 
     context = {
         'students': students,
-        'total_students': students.count()
+        'total_students': students.count(),
+        'classes': classes,
+        'selected_class': selected_class,
+        'selected_gender': selected_gender,
     }
-
     return render(request, 'portal/students.html', context)
 
 def student_info(request, student_id):

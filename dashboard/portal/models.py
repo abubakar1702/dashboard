@@ -14,6 +14,11 @@ class BloodGroups(models.TextChoices):
     AB_NEGATIVE = "AB_NEG", "AB-"
     O_POSITIVE = "O_POS", "O+"
     O_NEGATIVE = "O_NEG", "O-"
+    
+class Gender(models.TextChoices):
+    MALE = "M", "Male"
+    FEMALE = "F", "Female"
+    OTHER = "O", "Other"
 
 def get_year_choices():
     current_year = datetime.datetime.now().year
@@ -24,6 +29,12 @@ class Student(models.Model):
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     nationality = models.CharField(max_length=100)
+    gender = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        null=True,
+        blank=True
+    )
     student_id = models.IntegerField(unique=True)
     roll_number = models.SmallIntegerField()
     phone_number = models.CharField(max_length=15, blank=True)
@@ -36,6 +47,8 @@ class Student(models.Model):
         null=True
     )
     birth_certificate_id = models.IntegerField(null=True, blank=True)
+    present_address = models.TextField(null=True, blank=True)
+    permanent_address = models.TextField(null=True, blank=True)
     fathers_name = models.CharField(max_length=100)
     fathers_nid = models.CharField(max_length=17)
     mothers_name = models.CharField(max_length=100)
@@ -62,6 +75,15 @@ class Student(models.Model):
 class Teacher(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    gender = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        null=True,
+        blank=True
+    )
+    date_of_birth = models.DateField(null=True, blank=True)
+    nationality = models.CharField(max_length=100, default="Bangladeshi")
+    address = models.TextField(null=True, blank=True)
     teacher_id = models.IntegerField(unique=True)
     teacher_nid = models.CharField(max_length=17)
     phone_number = models.CharField(max_length=15, blank=True)
