@@ -48,6 +48,21 @@
                             </tr>
 
                             <tr>
+                                <th class="bg-light">Date of Birth</th>
+                                <td>{{ teacher.date_of_birth|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Gender</th>
+                                <td>{{ teacher.get_gender_display|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Nationality</th>
+                                <td>{{ teacher.nationality|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
                                 <th class="bg-light">Blood Group</th>
                                 <td>{{ teacher.get_blood_group_display|default:"Not provided" }}</td>
                             </tr>
@@ -71,6 +86,11 @@
                             <tr>
                                 <th class="bg-light">Email</th>
                                 <td>{{ teacher.email|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Address</th>
+                                <td>{{ teacher.address|linebreaksbr|default:"Not provided" }}</td>
                             </tr>
                         </tbody>
                     </table>

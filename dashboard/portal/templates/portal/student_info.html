@@ -45,6 +45,11 @@
                             </tr>
 
                             <tr>
+                                <th class="bg-light">Gender</th>
+                                <td>{{ student.get_gender_display|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
                                 <th class="bg-light">Blood Group</th>
                                 <td>{{ student.get_blood_group_display|default:"Not provided" }}</td>
                             </tr>
@@ -78,6 +83,16 @@
                             <tr>
                                 <th class="bg-light">Email</th>
                                 <td>{{ student.email|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Present Address</th>
+                                <td>{{ student.present_address|linebreaksbr|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="bg-light">Permanent Address</th>
+                                <td>{{ student.permanent_address|linebreaksbr|default:"Not provided" }}</td>
                             </tr>
                         </tbody>
                     </table>

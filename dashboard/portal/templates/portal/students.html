@@ -11,10 +11,9 @@
         <div class="col-auto">
             <label class="form-label mb-0">Class</label>
             <select name="class" class="form-select">
-                <option value="all" {% if selected_class=='all' %}selected{% endif %}>All Classes</option>
+                <option value="all" {% if selected_class == 'all' %}selected{% endif %}>All Classes</option>
                 {% for class in classes %}
-                <option value="{{ class.id }}" {% if selected_class==class.id|add:"" %}selected{% endif %}>{{
-                    class.class_name }}</option>
+                <option value="{{ class.id }}" {% if selected_class == class.id|add:"" %}selected{% endif %}>{{ class.class_name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -22,10 +21,10 @@
         <div class="col-auto">
             <label class="form-label mb-0">Gender</label>
             <select name="gender" class="form-select">
-                <option value="all" {% if selected_gender=='all' %}selected{% endif %}>All</option>
-                <option value="M" {% if selected_gender=='M' %}selected{% endif %}>Male</option>
-                <option value="F" {% if selected_gender=='F' %}selected{% endif %}>Female</option>
-                <option value="O" {% if selected_gender=='O' %}selected{% endif %}>Other</option>
+                <option value="all" {% if selected_gender == 'all' %}selected{% endif %}>All</option>
+                <option value="M" {% if selected_gender == 'M' %}selected{% endif %}>Male</option>
+                <option value="F" {% if selected_gender == 'F' %}selected{% endif %}>Female</option>
+                <option value="O" {% if selected_gender == 'O' %}selected{% endif %}>Other</option>
             </select>
         </div>
 
