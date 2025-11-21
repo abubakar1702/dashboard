@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Student, Class, Teacher
+from datetime import datetime
 
 
 def teacher_list(request):
@@ -32,10 +33,31 @@ def student_list(request):
 def student_info(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
-    context = {
-        'student': student
-    }
+    earliest_enrollment = student.enrollments.order_by('enrollment_date').first()
+    
+    if earliest_enrollment:
+        start_year = earliest_enrollment.enrollment_date.year
+    else:
+        start_year = datetime.now().year
+    
+    current_year = datetime.now().year
 
+    available_years = list(range(start_year, current_year + 1))
+    
+    selected_year = request.GET.get('year', current_year)
+    try:
+        selected_year = int(selected_year)
+    except (ValueError, TypeError):
+        selected_year = current_year
+    
+    grades = student.grades.filter(exam__academic_year=selected_year)
+    
+    context = {
+        'student': student,
+        'grades': grades,
+        'available_years': available_years,
+        'selected_year': selected_year,
+    }
     return render(request, 'portal/student_info.html', context)
 
 

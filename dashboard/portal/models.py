@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import date
+import datetime
 
 
 class BloodGroups(models.TextChoices):
@@ -14,6 +15,9 @@ class BloodGroups(models.TextChoices):
     O_POSITIVE = "O_POS", "O+"
     O_NEGATIVE = "O_NEG", "O-"
 
+def get_year_choices():
+    current_year = datetime.datetime.now().year
+    return [(year, year) for year in range(1980, current_year + 1)]
 
 class Student(models.Model):
     first_name = models.CharField(max_length=100)
@@ -154,15 +158,17 @@ class Exam(models.Model):
     class ExamType(models.TextChoices):
         MIDTERM = "MIDTERM", "Mid-Term Exam"
         FINAL = "FINAL", "Final Exam"
-        FIRST_CLASS_TEST = "FIRST_CLASS_TEST", "Class Test"
-        SECOND_CLASS_TEST = "SECOND_CLASS_TEST", "Class Test"
+        FIRST_CLASS_TEST = "FIRST_CLASS_TEST", "Class Test One"
+        SECOND_CLASS_TEST = "SECOND_CLASS_TEST", "Class Test Two"
         PRACTICAL = "PRACTICAL", "Practical Exam"
 
-    exam_name = models.CharField(max_length=100)
     exam_type = models.CharField(max_length=20, choices=ExamType.choices)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exams')
     class_ref = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='exams')
-    academic_year = models.CharField(max_length=9)
+    academic_year = models.IntegerField(
+        choices=get_year_choices(),
+        default=datetime.datetime.now().year,
+    )
     exam_date = models.DateField()
     total_marks = models.PositiveIntegerField(default=100)
     pass_marks = models.PositiveIntegerField(default=40)
@@ -173,10 +179,10 @@ class Exam(models.Model):
 
     class Meta:
         ordering = ['-exam_date']
-        unique_together = ['exam_name', 'subject', 'class_ref', 'academic_year']
+        unique_together = ['exam_type', 'subject', 'class_ref', 'academic_year']
 
     def __str__(self):
-        return f"{self.exam_name} - {self.subject} ({self.class_ref})"
+        return f"{self.get_exam_type_display()} - {self.subject} ({self.class_ref})"
 
 
 class Grade(models.Model):
@@ -198,7 +204,7 @@ class Grade(models.Model):
         ordering = ['-exam__exam_date']
 
     def __str__(self):
-        return f"{self.student.full_name} - {self.exam.exam_name}: {self.marks_obtained}/{self.exam.total_marks}"
+        return f"{self.student.full_name} - {self.exam.exam_type}: {self.marks_obtained}/{self.exam.total_marks}"
 
     @property
     def percentage(self):

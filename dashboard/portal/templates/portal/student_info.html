@@ -144,7 +144,29 @@
             <hr>
             <h4 class="fw-bold">Grades</h4>
 
-            {% if student.grades.all %}
+            <!-- Year Dropdown -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select class="form-select" id="yearSelect" onchange="filterByYear()">
+                        {% for year in available_years %}
+                        <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>
+                            {{ year }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <script>
+                function filterByYear() {
+                    const year = document.getElementById('yearSelect').value;
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('year', year);
+                    window.location.href = currentUrl.toString();
+                }
+            </script>
+
+            {% if grades %}
             <table class="table table-bordered table-striped mt-3">
                 <thead class="table-secondary">
                     <tr>
@@ -157,9 +179,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for g in student.grades.all %}
+                    {% for g in grades %}
                     <tr>
-                        <td>{{ g.exam.exam_name }}</td>
+                        <td>{{ g.exam.get_exam_type_display }}</td>
                         <td>{{ g.exam.subject.subject_name }}</td>
                         <td>
                             {% if g.is_absent %}
@@ -182,7 +204,7 @@
                 </tbody>
             </table>
             {% else %}
-            <p>No grades available.</p>
+            <p>No grades available for the year {{ selected_year }}.</p>
             {% endif %}
 
         </div>

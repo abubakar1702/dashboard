@@ -92,9 +92,9 @@ class GradeInline(admin.TabularInline):
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ('exam_name', 'exam_type', 'subject', 'class_ref', 'academic_year', 'exam_date')
+    list_display = ('exam_type', 'subject', 'class_ref', 'academic_year', 'exam_date')
     list_filter = ('exam_type', 'academic_year', 'class_ref', 'subject')
-    search_fields = ('exam_name', 'subject__subject_name', 'class_ref__class_name')
+    search_fields = ('subject__subject_name', 'class_ref__class_name')
     readonly_fields = ('created_at', 'updated_at')
     inlines = [GradeInline]
 
@@ -103,7 +103,7 @@ class ExamAdmin(admin.ModelAdmin):
 class GradeAdmin(admin.ModelAdmin):
     list_display = ('student', 'exam', 'marks_obtained', 'percentage', 'grade', 'is_passed', 'is_absent')
     list_filter = ('exam__exam_type', 'exam__academic_year', 'exam__class_ref', 'is_absent')
-    search_fields = ('student__first_name', 'student__last_name', 'exam__exam_name')
+    search_fields = ('student__first_name', 'student__last_name', 'exam__exam_type')
     readonly_fields = ('created_at', 'updated_at', 'percentage', 'grade', 'is_passed')
 
     def get_readonly_fields(self, request, obj=None):
