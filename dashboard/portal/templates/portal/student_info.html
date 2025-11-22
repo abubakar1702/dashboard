@@ -60,6 +60,11 @@
                             </tr>
 
                             <tr>
+                                <th class="bg-light">Religion</th>
+                                <td>{{ student.get_religion_display|default:"Not provided" }}</td>
+                            </tr>
+
+                            <tr>
                                 <th class="bg-light">Student ID</th>
                                 <td>{{ student.student_id }}</td>
                             </tr>

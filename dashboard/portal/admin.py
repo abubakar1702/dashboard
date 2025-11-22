@@ -2,8 +2,14 @@ from django.contrib import admin
 from .models import Student, Teacher, Class, Section, Subject, Enrollment, Exam, Grade
 
 
+class EnrollmentInline(admin.TabularInline):
+    model = Enrollment
+    extra = 1
+
+
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
+    inlines = [EnrollmentInline]
     list_display = ('student_id', 'full_name', 'date_of_birth', 'gender', 'phone_number', 'fathers_name', 'mothers_name')
     list_filter = ('blood_group', 'nationality', 'created_at')
     search_fields = ('first_name', 'last_name', 'student_id', 'email')
@@ -13,11 +19,11 @@ class StudentAdmin(admin.ModelAdmin):
         ('Personal Information', {
             'fields': (
                 'first_name', 'last_name', 'date_of_birth', 'nationality', 'gender',
-                'blood_group', 'photo', 'present_address', 'permanent_address'
+                'blood_group', 'photo', 'present_address', 'permanent_address','religion'
             )
         }),
         ('Academic Information', {
-            'fields': ('student_id', 'roll_number', 'phone_number', 'email')
+            'fields': ('student_id', 'phone_number', 'email')
         }),
         ('Parent Information', {
             'fields': ('fathers_name', 'fathers_nid', 'mothers_name', 'mothers_nid', 'birth_certificate_id')
@@ -37,7 +43,7 @@ class TeacherAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('Personal Information', {
-            'fields': ('first_name', 'last_name','photo','gender','date_of_birth','address','nationality', 'teacher_nid', 'blood_group')
+            'fields': ('first_name', 'last_name','photo','gender','date_of_birth','address','nationality','religion', 'teacher_nid', 'blood_group')
         }),
         ('Contact Information', {
             'fields': ('phone_number', 'email')

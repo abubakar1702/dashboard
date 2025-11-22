@@ -20,6 +20,13 @@ class Gender(models.TextChoices):
     FEMALE = "F", "Female"
     OTHER = "O", "Other"
 
+class Religion(models.TextChoices):
+    ISLAM = "ISL", "Islam"
+    CHRISTIAN = "CHR", "Christian"
+    HINDU = "HIN", "Hindu"
+    BUDDHIST = "BUD", "Buddhist"
+    OTHER = "OTH", "Other"
+
 def get_year_choices():
     current_year = datetime.datetime.now().year
     return [(year, year) for year in range(1980, current_year + 1)]
@@ -42,6 +49,12 @@ class Student(models.Model):
     blood_group = models.CharField(
         max_length=10,
         choices=BloodGroups.choices,
+        blank=True,
+        null=True
+    )
+    religion = models.CharField(
+        max_length=10,
+        choices=Religion.choices,
         blank=True,
         null=True
     )
@@ -91,6 +104,12 @@ class Teacher(models.Model):
     blood_group = models.CharField(
         max_length=10,
         choices=BloodGroups.choices,
+        blank=True,
+        null=True
+    )
+    religion = models.CharField(
+        max_length=10,
+        choices=Religion.choices,
         blank=True,
         null=True
     )
