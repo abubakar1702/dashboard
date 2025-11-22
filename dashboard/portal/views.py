@@ -78,9 +78,12 @@ def student_info(request, student_id):
     
     grades = student.grades.filter(exam__academic_year=selected_year)
     
+    roll = student.enrollments.first().roll_number
+    
     context = {
         'student': student,
         'grades': grades,
+        'roll_number': roll,
         'available_years': available_years,
         'selected_year': selected_year,
     }

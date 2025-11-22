@@ -36,7 +36,6 @@ class Student(models.Model):
         blank=True
     )
     student_id = models.IntegerField(unique=True)
-    roll_number = models.SmallIntegerField()
     phone_number = models.CharField(max_length=15, blank=True)
     email = models.EmailField(max_length=100, null=True, blank=True)
     photo = models.ImageField(upload_to="photos/", null=True, blank=True)
@@ -103,6 +102,15 @@ class Teacher(models.Model):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    @property
+    def age(self):
+        if not self.date_of_birth:
+            return None
+        today = date.today()
+        base_age = today.year - self.date_of_birth.year
+        is_birthday_passed = (today.month, today.day) >= (self.date_of_birth.month, self.date_of_birth.day)
+        return base_age if is_birthday_passed else base_age - 1
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -114,7 +122,7 @@ class Teacher(models.Model):
 
 class Class(models.Model):
     class_name = models.CharField(max_length=10)
-    class_serial = models.SmallIntegerField(max_length=2, default=0)
+    class_serial = models.SmallIntegerField(default=0)
     teachers = models.ManyToManyField(Teacher, related_name='classes')
     class_teacher = models.ForeignKey(
         Teacher,
@@ -130,7 +138,7 @@ class Class(models.Model):
 
 class Section(models.Model):
     section = models.CharField(max_length=100)
-    class_ref = models.ForeignKey(Class, on_delete=models.CASCADE)
+    class_ref = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='sections')
 
     def __str__(self):
         return f"{self.class_ref} - {self.section}"
@@ -155,6 +163,8 @@ class Enrollment(models.Model):
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrollments')
     class_enrolled = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='enrollments')
+    roll_number = models.SmallIntegerField(default=0)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='enrollments', null=True, blank=True)
     academic_year = models.CharField(max_length=9, help_text="e.g., 2024-2025")
     enrollment_date = models.DateField()
     status = models.CharField(

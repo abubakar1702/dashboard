@@ -4,7 +4,7 @@ from .models import Student, Teacher, Class, Section, Subject, Enrollment, Exam,
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'full_name', 'date_of_birth', 'nationality', 'roll_number', 'phone_number', 'photo')
+    list_display = ('student_id', 'full_name', 'date_of_birth', 'gender', 'phone_number', 'fathers_name', 'mothers_name')
     list_filter = ('blood_group', 'nationality', 'created_at')
     search_fields = ('first_name', 'last_name', 'student_id', 'email')
     readonly_fields = ('created_at', 'updated_at', 'age')
@@ -12,8 +12,8 @@ class StudentAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Personal Information', {
             'fields': (
-                'first_name', 'last_name', 'date_of_birth', 'nationality',
-                'blood_group', 'photo'
+                'first_name', 'last_name', 'date_of_birth', 'nationality', 'gender',
+                'blood_group', 'photo', 'present_address', 'permanent_address'
             )
         }),
         ('Academic Information', {
@@ -31,13 +31,13 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('teacher_id', 'full_name', 'teacher_nid', 'phone_number', 'email', 'hire_date')
+    list_display = ('teacher_id', 'full_name','gender', 'teacher_nid', 'phone_number', 'email', 'hire_date')
     list_filter = ('blood_group', 'hire_date', 'created_at')
     search_fields = ('first_name', 'last_name', 'teacher_id', 'email')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('Personal Information', {
-            'fields': ('first_name', 'last_name', 'teacher_nid', 'blood_group')
+            'fields': ('first_name', 'last_name','photo','gender','date_of_birth','address','nationality', 'teacher_nid', 'blood_group')
         }),
         ('Contact Information', {
             'fields': ('phone_number', 'email')
