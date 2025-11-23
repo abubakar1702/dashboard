@@ -78,7 +78,7 @@ def student_info(request, student_id):
     
     grades = student.grades.filter(exam__academic_year=selected_year)
     
-    roll = student.enrollments.first().roll_number
+    roll = student.enrollments.last().roll_number
 
     section = student.enrollments.first().section
     
