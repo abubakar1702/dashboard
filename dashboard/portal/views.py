@@ -79,6 +79,8 @@ def student_info(request, student_id):
     grades = student.grades.filter(exam__academic_year=selected_year)
     
     roll = student.enrollments.first().roll_number
+
+    section = student.enrollments.first().section
     
     context = {
         'student': student,
@@ -86,6 +88,7 @@ def student_info(request, student_id):
         'roll_number': roll,
         'available_years': available_years,
         'selected_year': selected_year,
+        'section': section,
     }
     return render(request, 'portal/student_info.html', context)
 

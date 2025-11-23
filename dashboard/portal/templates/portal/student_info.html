@@ -140,6 +140,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Class</th>
+                        <th>Section</th>
                         <th>Academic Year</th>
                         <th>Status</th>
                         <th>Enrollment Date</th>
@@ -149,6 +150,7 @@
                     {% for e in student.enrollments.all %}
                     <tr>
                         <td>{{ e.class_enrolled }}</td>
+                        <td>{{ e.section }}</td>
                         <td>{{ e.academic_year }}</td>
                         <td>{{ e.get_status_display }}</td>
                         <td>{{ e.enrollment_date }}</td>
