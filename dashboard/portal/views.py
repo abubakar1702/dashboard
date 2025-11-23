@@ -26,28 +26,29 @@ def student_list(request):
     selected_class = request.GET.get('class', 'all')
     selected_gender = request.GET.get('gender', 'all')
     selected_section = request.GET.get('section', 'all')
+    selected_status = request.GET.get('status', 'ACTIVE')
 
-    active_enrollment = Enrollment.objects.filter(
+    enrollment_filter = Enrollment.objects.filter(
         student=OuterRef('pk'),
-        status='ACTIVE'
+        status=selected_status
     )
 
     if selected_class and selected_class != 'all':
         try:
             class_id = int(selected_class)
-            active_enrollment = active_enrollment.filter(class_enrolled__id=class_id)
+            enrollment_filter = enrollment_filter.filter(class_enrolled__id=class_id)
         except (ValueError, TypeError):
             pass
 
     if selected_class and selected_class != 'all' and selected_section and selected_section != 'all':
         try:
             section_id = int(selected_section)
-            active_enrollment = active_enrollment.filter(section__id=section_id)
+            enrollment_filter = enrollment_filter.filter(section__id=section_id)
         except (ValueError, TypeError):
             pass
 
     students = Student.objects.filter(
-        Exists(active_enrollment)
+        Exists(enrollment_filter)
     ).order_by('student_id')
 
     if selected_gender and selected_gender != 'all':
@@ -72,6 +73,7 @@ def student_list(request):
         'selected_class': selected_class,
         'selected_gender': selected_gender,
         'selected_section': selected_section,
+        'selected_status': selected_status,
     }
     return render(request, 'portal/students.html', context)
 

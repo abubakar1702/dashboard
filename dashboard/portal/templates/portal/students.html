@@ -29,6 +29,17 @@
         </div>
 
         <div class="col-auto">
+            <label class="form-label mb-0">Status</label>
+            <select name="status" class="form-select">
+                <option value="ACTIVE" {% if selected_status == "ACTIVE" %}selected{% endif %}>Active</option>
+                <option value="INACTIVE" {% if selected_status == "INACTIVE" %}selected{% endif %}>Inactive</option>
+                <option value="GRADUATED" {% if selected_status == "GRADUATED" %}selected{% endif %}>Graduated</option>
+                <option value="TRANSFERRED" {% if selected_status == "TRANSFERRED" %}selected{% endif %}>Transferred</option>
+                <option value="DROPPED" {% if selected_status == "DROPPED" %}selected{% endif %}>Dropped</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
             <label class="form-label mb-0">Gender</label>
             <select name="gender" class="form-select">
                 <option value="all" {% if selected_gender == "all" %}selected{% endif %}>All</option>
@@ -57,11 +68,14 @@
             }
             
             const genderSelect = form.querySelector('select[name="gender"]');
+            const statusSelect = form.querySelector('select[name="status"]');
             const currentGender = genderSelect ? genderSelect.value : 'all';
+            const currentStatus = statusSelect ? statusSelect.value : 'ACTIVE';
             
             const url = new URL(window.location.href);
             url.searchParams.set('class', classSelect.value);
             url.searchParams.set('section', 'all');
+            url.searchParams.set('status', currentStatus);
             if (currentGender !== 'all') {
                 url.searchParams.set('gender', currentGender);
             } else {
