@@ -7,13 +7,23 @@
         <span class="badge bg-primary fs-6">{{ total_students }} Students</span>
     </div>
 
-    <form method="get" class="row g-2 align-items-center mb-3">
+    <form method="get" class="row g-2 align-items-center mb-3" id="filterForm">
         <div class="col-auto">
             <label class="form-label mb-0">Class</label>
-            <select name="class" class="form-select">
+            <select name="class" id="classSelect" class="form-select" onchange="handleClassChange()">
                 <option value="all" {% if selected_class == "all" %}selected{% endif %}>All Classes</option>
                 {% for class in classes %}
                 <option value="{{ class.id }}" {% if selected_class == class.id|stringformat:"s" %}selected{% endif %}>{{ class.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label mb-0">Section</label>
+            <select name="section" id="sectionSelect" class="form-select" {% if selected_class == "all" %}disabled{% endif %}>
+                <option value="all" {% if selected_section == "all" %}selected{% endif %}>All Sections</option>
+                {% for section in sections %}
+                <option value="{{ section.id }}" {% if selected_section == section.id|stringformat:"s" %}selected{% endif %}>{{ section.section }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -32,6 +42,44 @@
             <button type="submit" class="btn btn-primary">Filter</button>
         </div>
     </form>
+
+    <script>
+        function handleClassChange() {
+            const classSelect = document.getElementById('classSelect');
+            const sectionSelect = document.getElementById('sectionSelect');
+            const form = document.getElementById('filterForm');
+            
+            if (classSelect.value === 'all') {
+                sectionSelect.disabled = true;
+                sectionSelect.value = 'all';
+            } else {
+                sectionSelect.disabled = false;
+            }
+            
+            const genderSelect = form.querySelector('select[name="gender"]');
+            const currentGender = genderSelect ? genderSelect.value : 'all';
+            
+            const url = new URL(window.location.href);
+            url.searchParams.set('class', classSelect.value);
+            url.searchParams.set('section', 'all');
+            if (currentGender !== 'all') {
+                url.searchParams.set('gender', currentGender);
+            } else {
+                url.searchParams.delete('gender');
+            }
+            
+            window.location.href = url.toString();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const classSelect = document.getElementById('classSelect');
+            const sectionSelect = document.getElementById('sectionSelect');
+            
+            if (classSelect.value === 'all') {
+                sectionSelect.disabled = true;
+            }
+        });
+    </script>
 
     <div class="card shadow-sm">
         <div class="card-body p-0">

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Student, Class, Teacher, Enrollment
+from .models import Student, Class, Teacher, Enrollment, Section
 from datetime import datetime
 
 
@@ -25,6 +25,7 @@ from django.db.models import Exists, OuterRef
 def student_list(request):
     selected_class = request.GET.get('class', 'all')
     selected_gender = request.GET.get('gender', 'all')
+    selected_section = request.GET.get('section', 'all')
 
     active_enrollment = Enrollment.objects.filter(
         student=OuterRef('pk'),
@@ -38,6 +39,13 @@ def student_list(request):
         except (ValueError, TypeError):
             pass
 
+    if selected_class and selected_class != 'all' and selected_section and selected_section != 'all':
+        try:
+            section_id = int(selected_section)
+            active_enrollment = active_enrollment.filter(section__id=section_id)
+        except (ValueError, TypeError):
+            pass
+
     students = Student.objects.filter(
         Exists(active_enrollment)
     ).order_by('student_id')
@@ -46,13 +54,24 @@ def student_list(request):
         students = students.filter(gender=selected_gender)
 
     classes = Class.objects.all().order_by('class_serial')
+    
+    if selected_class and selected_class != 'all':
+        try:
+            class_id = int(selected_class)
+            sections = Section.objects.filter(class_ref__id=class_id).order_by('section')
+        except (ValueError, TypeError):
+            sections = Section.objects.none()
+    else:
+        sections = Section.objects.none()
 
     context = {
         'students': students,
         'total_students': students.count(),
         'classes': classes,
+        'sections': sections,
         'selected_class': selected_class,
         'selected_gender': selected_gender,
+        'selected_section': selected_section,
     }
     return render(request, 'portal/students.html', context)
 
