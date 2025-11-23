@@ -13,8 +13,7 @@
             <select name="class" class="form-select">
                 <option value="all" {% if selected_class == "all" %}selected{% endif %}>All Classes</option>
                 {% for class in classes %}
-                <option value="{{ class.id }}" {% if selected_class == class.id|stringformat:"s" %}selected{% endif %}>{{
-                    class.class_name }}</option>
+                <option value="{{ class.id }}" {% if selected_class == class.id|stringformat:"s" %}selected{% endif %}>{{ class.class_name }}</option>
                 {% endfor %}
             </select>
         </div>
